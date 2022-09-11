@@ -29,7 +29,7 @@ class AuthController extends Controller
         // $accessToken = $user->createToken('authToken')->accessToken;
 
 
-        return response(['user' => $user,'message'=>"please check your email for email verification"]);
+        return successResponse($user,__('index.data.found'),201);
 
     }
 

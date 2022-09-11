@@ -2,11 +2,15 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Events\AddBook as EventsAddBook;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\BookFormRequest;
 use App\Http\Resources\BookResource;
 use App\Models\Book;
+use App\Models\User;
+use App\Notifications\AddBook;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Notification;
 
 class BookController extends Controller
 {
@@ -44,10 +48,10 @@ class BookController extends Controller
 
       $data_validated['user_id']=$request->user()->id;
       $book=Book::create($data_validated);
-return response([
-    'status'=>true,
-    'data'=>$book
-],201);
+      $user=User::where('email','ohyatt@example.com')->first();
+      $user->notify(new AddBook($book));
+    //   event(new EventsAddBook($book,$user));
+return successResponse($book,__('index.data.found'),201);
         //
     }
 
